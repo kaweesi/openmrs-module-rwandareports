@@ -12,7 +12,7 @@
 	<activator>@MODULE_PACKAGE@.RwandaReportsModuleActivator</activator>
 	<updateURL>https://dev.openmrs.org/modules/download/@MODULE_ID@/update.rdf
 	</updateURL>
-	<require_version>1.4.0</require_version>
+	<require_version>${openMRSVersion}</require_version>
 
 
 	<require_modules>

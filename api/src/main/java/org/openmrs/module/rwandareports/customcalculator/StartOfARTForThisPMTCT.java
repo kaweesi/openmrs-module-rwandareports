@@ -48,7 +48,7 @@ public class StartOfARTForThisPMTCT implements CustomCalculation{
 			{
 				if(drO.isCurrent(pmtctStart.getValue()))
 				{
-					if(drug == null || drO.getStartDate().before(drug.getStartDate()))
+					if(drug == null || drO.getEffectiveStartDate().before(drug.getEffectiveStartDate()))
 					{
 						drug = drO;
 					}
@@ -57,7 +57,7 @@ public class StartOfARTForThisPMTCT implements CustomCalculation{
 			
 			if(drug != null)
 			{
-				startArt.setValue(drug.getStartDate());
+				startArt.setValue(drug.getEffectiveStartDate());
 			}
 		}
 		

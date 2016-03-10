@@ -29,6 +29,7 @@ import org.openmrs.Concept;
 import org.openmrs.DrugOrder;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mohorderentrybridge.api.MoHOrderEntryBridgeService;
 import org.openmrs.module.orderextension.DrugRegimen;
 import org.openmrs.module.orderextension.ExtendedDrugOrder;
 import org.openmrs.module.rwandareports.util.GlobalPropertiesManagement;
@@ -52,7 +53,7 @@ public class RegimenHeaderPortletController extends PortletController {
 		Concept chemotherapy = gp.getConcept(GlobalPropertiesManagement.CHEMOTHERAPY);
 		Patient patient = Context.getPatientService().getPatient((Integer) model.get("patientId"));
     	
-		List<DrugOrder> allDrugOrders = Context.getOrderService().getDrugOrdersByPatient(patient);
+		List<DrugOrder> allDrugOrders = Context.getService(MoHOrderEntryBridgeService.class).getDrugOrdersByPatient(patient);
 		List<DrugRegimen> regimens = new ArrayList<DrugRegimen>();
 		List<DrugRegimen> allRegimens = new ArrayList<DrugRegimen>();
 		

@@ -28,6 +28,7 @@ import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mohorderentrybridge.api.MoHOrderEntryBridgeService;
 import org.openmrs.module.orderextension.ExtendedDrugOrder;
 import org.openmrs.module.reporting.dataset.DataSet;
 import org.openmrs.module.reporting.dataset.DataSetColumn;
@@ -96,7 +97,7 @@ public class DrugOrderTotalDataSetEvaluator implements DataSetEvaluator {
 			Map<Drug, Double> drugTotal = new HashMap<Drug, Double>();
 			for (Integer pId : cohort.getMemberIds()) {
 				Patient patient = Context.getPatientService().getPatient(pId);
-				List<DrugOrder> allDrugOrders = Context.getOrderService().getDrugOrdersByPatient(patient);
+				List<DrugOrder> allDrugOrders = Context.getService(MoHOrderEntryBridgeService.class).getDrugOrdersByPatient(patient);
 				
 				for (DrugOrder drO : allDrugOrders) {
 					if (drO instanceof ExtendedDrugOrder) {
@@ -112,9 +113,9 @@ public class DrugOrderTotalDataSetEvaluator implements DataSetEvaluator {
 										dosage = drugTotal.get(eDrO.getDrug());
 									}
 									
-									if (eDrO.getDose() != null && eDrO.getUnits() != null) {
+									if (eDrO.getDose() != null && eDrO.getDoseUnits() != null) {
 										
-										if (eDrO.getUnits().contains("/m2")) {
+										if (eDrO.getDoseUnits().getName().getName().contains("/m2")) {
 											
 											List<Obs> bsaValues = Context.getObsService().getObservationsByPersonAndConcept(
 											    patient, bsa);
@@ -138,7 +139,7 @@ public class DrugOrderTotalDataSetEvaluator implements DataSetEvaluator {
 												}
 												dosage = dosage + calcDose;
 											}
-										} else if (eDrO.getUnits().contains("/kg")) {
+										} else if (eDrO.getDoseUnits().getName().getName().contains("/kg")) {
 											
 											List<Obs> weightValues = Context.getObsService()
 											        .getObservationsByPersonAndConcept(patient, weight);
@@ -162,7 +163,7 @@ public class DrugOrderTotalDataSetEvaluator implements DataSetEvaluator {
 												}
 												dosage = dosage + calcDose;
 											}
-										} else if (eDrO.getUnits().contains("AUC")) {
+										} else if (eDrO.getDoseUnits().getName().getName().contains("AUC")) {
 											dosage = dosage + 2;
 										} else {
 											if (eDrO.getDrug().getDosageForm() != null

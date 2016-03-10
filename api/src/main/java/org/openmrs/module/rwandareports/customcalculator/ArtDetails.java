@@ -35,7 +35,7 @@ public class ArtDetails implements CustomCalculation{
 				DrugOrder startOrder = (DrugOrder)result.getValue();
 				if(startOrder != null)
 				{
-					startDate = startOrder.getStartDate();
+					startDate = startOrder.getEffectiveStartDate();
 				}
 			}
 			
@@ -44,7 +44,7 @@ public class ArtDetails implements CustomCalculation{
 				changeOrder = (List<DrugOrder>)result.getValue();
 				if(changeOrder != null && changeOrder.get(0) != null)
 				{
-					changeDate = changeOrder.get(0).getStartDate();
+					changeDate = changeOrder.get(0).getEffectiveStartDate();
 				}
 			}
 		}
@@ -74,7 +74,7 @@ public class ArtDetails implements CustomCalculation{
 				resultString.append(" (");
 				resultString.append(order.getDose());
 				resultString.append(" ");
-				String units = order.getUnits();
+				String units = order.getDoseUnits().getName().getName();
 				if(units != null)
 				{
 					units = units.replace("tab(s)", "Co");
@@ -82,7 +82,7 @@ public class ArtDetails implements CustomCalculation{
 				}
 				
 				resultString.append(",");
-				String freq = order.getFrequency();
+				String freq = order.getFrequency().getName();//TODO wrong, investigate which string was initially saved under frequency property
 				if(freq != null)
 				{
 					freq = freq.replace("day x 7 days/week", "j");

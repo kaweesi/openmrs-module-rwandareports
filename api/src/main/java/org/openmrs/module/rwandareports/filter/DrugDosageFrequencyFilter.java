@@ -17,9 +17,9 @@ public class DrugDosageFrequencyFilter implements ResultFilter {
 			result.append(drugOrder.getDrug().getName());
 			result.append(" ");
 			result.append(drugOrder.getDose());
-			result.append(drugOrder.getUnits());
+			result.append(drugOrder.getDoseUnits().getName().getName());
 			result.append(" ");
-			String freq = drugOrder.getFrequency();
+			String freq = drugOrder.getFrequency().getName();
 			if(freq != null)
 			{
 				if(freq.indexOf("x") > -1)

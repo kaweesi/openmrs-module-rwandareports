@@ -5,7 +5,6 @@
 		<artifactId>rwandareports</artifactId>
 		<version>2.5.8-SNAPSHOT</version>
 	</parent>
-	<groupId>org.openmrs.module</groupId>
 	<artifactId>rwandareports-omod</artifactId>
 	<packaging>jar</packaging>
 	<name>Rwanda Reports OMOD</name>
@@ -16,6 +15,12 @@
 			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>${project.parent.artifactId}-api</artifactId>
 			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>mohorderentrybridge-api</artifactId>
+			<version>${mohorderentrybridgeVersion}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

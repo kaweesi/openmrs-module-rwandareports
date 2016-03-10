@@ -28,6 +28,7 @@ import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mohorderentrybridge.api.MoHOrderEntryBridgeService;
 import org.openmrs.module.orderextension.ExtendedDrugOrder;
 import org.openmrs.module.reporting.dataset.DataSet;
 import org.openmrs.module.reporting.dataset.DataSetColumn;
@@ -103,7 +104,7 @@ public class DrugOrderDataSetEvaluator implements DataSetEvaluator {
 		if (cohort != null) {
 			for (Integer pId : cohort.getMemberIds()) {
 				Patient patient = Context.getPatientService().getPatient(pId);
-				List<DrugOrder> allDrugOrders = Context.getOrderService().getDrugOrdersByPatient(patient);
+				List<DrugOrder> allDrugOrders = Context.getService(MoHOrderEntryBridgeService.class).getDrugOrdersByPatient(patient);
 				
 				Collections.sort(allDrugOrders, new Comparator<DrugOrder>(){
 
@@ -143,9 +144,9 @@ public class DrugOrderDataSetEvaluator implements DataSetEvaluator {
 								
 								if (eDrO.getStartDate() != null && (sdf.format(eDrO.getStartDate())).equals(sdf.format(drugDSD.getAsOfDate()))) {
 									String dosage = "";
-									if (eDrO.getDose() != null && eDrO.getUnits() != null) {
+									if (eDrO.getDose() != null && eDrO.getDoseUnits() != null) {
 										
-										if (eDrO.getUnits().contains("/m2")) {
+										if (eDrO.getDoseUnits().getName().getName().contains("/m2")) {//TODO ???
 											
 											List<Obs> bsaValues = Context.getObsService().getObservationsByPersonAndConcept(
 											    patient, bsa);
@@ -185,12 +186,12 @@ public class DrugOrderDataSetEvaluator implements DataSetEvaluator {
 													calcDose = eDrO.getDrug().getMaximumDailyDose();
 												}
 												dosage = f.format(calcDose)
-												        + eDrO.getUnits().substring(0, eDrO.getUnits().indexOf("/"));
+												        + eDrO.getDoseUnits().getName().getName().substring(0, eDrO.getDoseUnits().getName().getName().indexOf("/"));
 											}
-										} else if (eDrO.getUnits().contains("AUC")) {
-											dosage = eDrO.getUnits() + "=" + eDrO.getDose();
+										} else if (eDrO.getDoseUnits().getName().getName().contains("AUC")) {
+											dosage = eDrO.getDoseUnits() + "=" + eDrO.getDose();
 										} else {
-											dosage = eDrO.getDose() + eDrO.getUnits();
+											dosage = eDrO.getDoseUnits().getName().getName() + eDrO.getDoseUnits().getName().getName();
 										}
 										
 										String drugString = eDrO.getDrug().getName() + " " + dosage;

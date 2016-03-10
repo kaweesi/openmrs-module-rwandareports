@@ -12,6 +12,7 @@ import org.openmrs.DrugOrder;
 import org.openmrs.Encounter;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mohorderentrybridge.api.MoHOrderEntryBridgeService;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.RowPerPatientData;
 import org.openmrs.module.rowperpatientreports.patientdata.evaluator.RowPerPatientDataEvaluator;
@@ -32,7 +33,7 @@ public class StartOfArtEvaluator implements RowPerPatientDataEvaluator{
 		
 		par.setDateFormat(pd.getDateFormat());
 		
-		List<DrugOrder> orders = Context.getOrderService().getDrugOrdersByPatient(pd.getPatient());
+		List<DrugOrder> orders = Context.getService(MoHOrderEntryBridgeService.class).getDrugOrdersByPatient(pd.getPatient());
 		
 		List<DrugOrder> results = new ArrayList<DrugOrder>();
 		
@@ -57,14 +58,14 @@ public class StartOfArtEvaluator implements RowPerPatientDataEvaluator{
 						{
 							if(drugConcepts.contains(drug))
 							{
-								if(order.getStartDate() != null && (pd.getEndDate() == null || OpenmrsUtil.compare(pd.getEndDate(), order.getStartDate()) >=0))
+								if(order.getEffectiveStartDate() != null && (pd.getEndDate() == null || OpenmrsUtil.compare(pd.getEndDate(), order.getEffectiveStartDate()) >=0))
 								{		
-									if(results.size() == 0 || order.getStartDate().before(results.get(0).getStartDate()))
+									if(results.size() == 0 || order.getEffectiveStartDate().before(results.get(0).getEffectiveStartDate()))
 									{
 										results = new ArrayList<DrugOrder>();
 										results.add(order);
 									}
-									else if(results.size() > 0 && order.getStartDate().equals(results.get(0).getStartDate()))
+									else if(results.size() > 0 && order.getEffectiveStartDate().equals(results.get(0).getEffectiveStartDate()))
 									{
 										results.add(order);
 									}

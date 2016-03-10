@@ -114,7 +114,7 @@ public class DrugRegimenInformationEvaluator implements RowPerPatientDataEvaluat
 						drugs.append(order.getDrug().getName());
 						drugs.append(" ");
 						drugs.append(order.getDose());
-						drugs.append(order.getUnits());
+						drugs.append(order.getDoseUnits().getName().getName());
 					}
 				}
 				

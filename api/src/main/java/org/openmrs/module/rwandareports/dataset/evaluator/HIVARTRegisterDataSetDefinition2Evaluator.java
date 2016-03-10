@@ -303,8 +303,8 @@ public class HIVARTRegisterDataSetDefinition2Evaluator implements DataSetEvaluat
 				Date endDate = null;
 				for(DrugOrder drO: values)
 				{
-					startDate = drO.getStartDate();
-					endDate = drO.getDiscontinuedDate();
+					startDate = drO.getEffectiveStartDate();
+					endDate = drO.getEffectiveStopDate();
 				}
 				
 				String dates = null;
@@ -501,9 +501,9 @@ public class HIVARTRegisterDataSetDefinition2Evaluator implements DataSetEvaluat
 			for(DrugOrder o: drugOrders)
 			{
 				Calendar oCal = Calendar.getInstance();
-				oCal.setTime(o.getStartDate());
+				oCal.setTime(o.getEffectiveStartDate());
 		
-				if((oCal.get(Calendar.YEAR) == obsResultCal.get(Calendar.YEAR) && oCal.get(Calendar.DAY_OF_YEAR) == obsResultCal.get(Calendar.DAY_OF_YEAR)) ||  o.getStartDate().after(startingDate))
+				if((oCal.get(Calendar.YEAR) == obsResultCal.get(Calendar.YEAR) && oCal.get(Calendar.DAY_OF_YEAR) == obsResultCal.get(Calendar.DAY_OF_YEAR)) ||  o.getEffectiveStartDate().after(startingDate))
 				{
 					ordersToReturn.add(o);
 				}
@@ -608,14 +608,14 @@ public class HIVARTRegisterDataSetDefinition2Evaluator implements DataSetEvaluat
 					discontinuedReasons = discontinuedReasons + " , ";
 				}
 		
-				if(o.getDiscontinuedReason() != null && o.getDrug() != null)
+				if(o.getOrderReason() != null && o.getDrug() != null)
 				{
-					discontinuedReasons = discontinuedReasons + o.getDrug().getName() + " - " + o.getDiscontinuedReason().getDisplayString(); 
+					discontinuedReasons = discontinuedReasons + o.getDrug().getName() + " - " + o.getOrderReason().getDisplayString(); 
 				}
 		
-				if(o.getDiscontinuedDate() != null)
+				if(o.getEffectiveStopDate() != null)
 				{
-					discontinuedReasons =  discontinuedReasons + ":" + new SimpleDateFormat("yyyy-MM-dd").format(o.getDiscontinuedDate());
+					discontinuedReasons =  discontinuedReasons + ":" + new SimpleDateFormat("yyyy-MM-dd").format(o.getEffectiveStopDate());
 				}
 			}
 		}

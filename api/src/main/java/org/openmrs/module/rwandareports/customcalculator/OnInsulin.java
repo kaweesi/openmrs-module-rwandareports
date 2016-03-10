@@ -8,8 +8,8 @@ import org.openmrs.DrugOrder;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Patient;
-import org.openmrs.api.OrderService.ORDER_STATUS;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mohorderentrybridge.api.MoHOrderEntryBridgeService;
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 import org.openmrs.module.rowperpatientreports.patientdata.definition.CustomCalculation;
 import org.openmrs.module.rowperpatientreports.patientdata.result.PatientDataResult;
@@ -34,7 +34,7 @@ public class OnInsulin implements CustomCalculation {
 
 				Patient p = result.getPatientData().getPatient();
 				List<Encounter> patientEncounters = Context.getEncounterService().getEncounters(p, null, null, null, null, diabetesEncouters, null, false);
-                List<DrugOrder> patientDrugOrders = Context.getOrderService().getDrugOrdersByPatient(p, ORDER_STATUS.NOTVOIDED, false);
+                List<DrugOrder> patientDrugOrders = Context.getService(MoHOrderEntryBridgeService.class).getDrugOrdersByPatient(p);
                 
 				if (patientEncounters.size() > 0 && patientDrugOrders.size() > 0) {
 					Encounter recentEncounter = patientEncounters.get(patientEncounters.size() - 1);  //the last encounter in the List should be the most recent one.

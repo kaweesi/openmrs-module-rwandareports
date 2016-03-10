@@ -198,20 +198,20 @@ public class ExtendedDrugOrderDataSetEvaluator implements DataSetEvaluator {
 				
 				DecimalFormat f = new DecimalFormat("0.###");
 				DecimalFormat f2 = new DecimalFormat("0.#");
-				if (edo.getDose() != null && edo.getUnits() != null) {
-					if (edo.getUnits().equals("mg/m2")) {
+				if (edo.getDose() != null && edo.getDoseUnits() != null) {
+					if (edo.getDoseUnits().getName().getName().equals("mg/m2")) {
 						doseDisplay = f.format(edo.getDose());
 					}
-					else if(edo.getUnits().contains("/m2") || edo.getUnits().contains("/kg"))
+					else if(edo.getDoseUnits().getName().getName().contains("/m2") || edo.getDoseUnits().getName().getName().contains("/kg"))
 					{
-						doseDisplay = f.format(edo.getDose()) + edo.getUnits();
+						doseDisplay = f.format(edo.getDose()) + edo.getDoseUnits().getName().getName();
 					}
-					else if(edo.getUnits().contains("AUC"))
+					else if(edo.getDoseUnits().getName().getName().contains("AUC"))
 					{
-						doseDisplay = edo.getUnits() + "=" + f.format(edo.getDose());
+						doseDisplay = edo.getDoseUnits().getName().getName() + "=" + f.format(edo.getDose());
 					}
 					
-					if (edo.getUnits().contains("/m2")) {
+					if (edo.getDoseUnits().getName().getName().contains("/m2")) {
 						
 						Patient patient = edo.getPatient();
 						List<Obs> bsaValues = Context.getObsService().getObservationsByPersonAndConcept(patient, bsa);
@@ -232,7 +232,7 @@ public class ExtendedDrugOrderDataSetEvaluator implements DataSetEvaluator {
 							actualDoseDisplay = f2.format(calcDose);
 						}
 						
-					} else if (edo.getUnits().contains("/kg")) {
+					} else if (edo.getDoseUnits().getName().getName().contains("/kg")) {
 						
 						Patient patient = edo.getPatient();
 						List<Obs> weightValues = Context.getObsService().getObservationsByPersonAndConcept(patient, weight);
@@ -253,12 +253,12 @@ public class ExtendedDrugOrderDataSetEvaluator implements DataSetEvaluator {
 							actualDoseDisplay = f2.format(calcDose);
 						}
 						
-					} else if(edo.getUnits().contains("AUC"))
+					} else if(edo.getDoseUnits().getName().getName().contains("AUC"))
 					{
 						actualDoseDisplay = "";
 					}
 						else {
-						actualDoseDisplay = f2.format(edo.getDose()) + " (" + edo.getUnits() + ")";
+						actualDoseDisplay = f2.format(edo.getDose()) + " (" + edo.getDoseUnits().getName().getName() + ")";
 					}
 				}
 				dataSet.addColumnValue(edo.getId(), dose, doseDisplay);
@@ -278,7 +278,7 @@ public class ExtendedDrugOrderDataSetEvaluator implements DataSetEvaluator {
 				
 				String freqDisplay = "";
 				if (edo.getFrequency() != null) {
-					freqDisplay = edo.getFrequency();
+					freqDisplay = edo.getFrequency().getName();
 					
 					int length = 0;
 					if (edo.getDiscontinuedDate() != null) {

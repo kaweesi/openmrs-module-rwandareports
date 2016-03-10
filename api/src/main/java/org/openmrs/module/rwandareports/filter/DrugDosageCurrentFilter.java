@@ -34,15 +34,15 @@ public class DrugDosageCurrentFilter implements ResultFilter {
 	
 		StringBuilder result = new StringBuilder();
 			
-		if(drugOrder.getDiscontinuedDate() != null){
-		  if(returnVisitDates().compareTo(drugOrder.getDiscontinuedDate()) < 0){
+		if(drugOrder.getEffectiveStopDate() != null){
+		  if(returnVisitDates().compareTo(drugOrder.getEffectiveStopDate()) < 0){
 			if(drugOrder != null && drugOrder.getDrug() != null){  
 			  result.append(drugOrder.getDrug().getName());
 			  result.append(" ");
 			  result.append(drugOrder.getDose());
-			  result.append(drugOrder.getUnits());
+			  result.append(drugOrder.getDoseUnits());
 			  result.append(" ");
-			  String freq = drugOrder.getFrequency();
+			  String freq = drugOrder.getFrequency().getName();
 			  if(freq != null)
 			    {
 				 if(freq.indexOf("x") > 1)
@@ -61,14 +61,14 @@ public class DrugDosageCurrentFilter implements ResultFilter {
 			 }
 		    }
 		  }
-		 else if(drugOrder.getDiscontinuedDate() == null){
+		 else if(drugOrder.getEffectiveStopDate() == null){
 				if(drugOrder != null && drugOrder.getDrug() != null){  
 				result.append(drugOrder.getDrug().getName());
 				result.append(" ");
 				result.append(drugOrder.getDose());
-				result.append(drugOrder.getUnits());
+				result.append(drugOrder.getDoseUnits());
 				result.append(" ");
-				String freq = drugOrder.getFrequency();
+				String freq = drugOrder.getFrequency().getName();
 				if(freq != null)
 				{
 					 if(freq.indexOf("x") > 1)
